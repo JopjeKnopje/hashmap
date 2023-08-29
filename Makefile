@@ -14,7 +14,7 @@ endif
 RUN_CMD = ./$(NAME)
 
 # CFLAGS += -Wall -Wextra -Werror
-# CFLAGS += -g -fsanitize=address
+CFLAGS += -g -fsanitize=address
 CFLAGS += -Wall -Wextra
 
 LIBFT = libft/build/libft.a
@@ -23,10 +23,11 @@ INC = -Ilibft/include -Iinclude
 
 SRC_DIR = src
 
-SRCS = main.c
+SRCS = main.c \
+	   map.c
 
 HEADER_DIR = include
-HEADERS = meta.h
+HEADERS = map.h
 
 OBJ_DIR = obj
 
