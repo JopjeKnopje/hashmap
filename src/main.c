@@ -43,7 +43,7 @@ int main()
 	i = 0;
 	while (KEYS[i])
 	{
-		char *val = map_get(map, KEYS[i]);
+		char *val = map_get_value(map, KEYS[i]);
 		if (!val)
 		{
 			printf("no value for %ld\n", i);
