@@ -25,13 +25,14 @@ static char *KEYS[] = {
 	"key5",
 	"key6",
 	"key7",
-	"key8",
+	"key7",
 	NULL,
 };
 
 int main()
 {
-	t_map *map = map_init(&hash, 4);
+	const size_t SIZE = 2;
+	t_map *map = map_init(&hash, SIZE);
 
 	size_t i = 0;
 	while (KEYS[i])

@@ -1,9 +1,11 @@
 #include "map.h"
 #include "libft.h"
+#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/_types/_va_list.h>
 
 int	strlen_largest(const char *s1, const char *s2)
 {
@@ -43,9 +45,25 @@ t_map *map_add(t_map *map, char *key, char *value)
 	size_t index = map->hash_func(key) % map->size;
 	t_bucket *bucket = &map->buckets[index];
 
+	// Check if we have key in bucket that matches with the key passed.
+	// 		if true:	overwrite that value with new value.
+	// 
+	// 		else:		we have a collision, so we add another bucket to the next ptr.
+	//					Essentially adding a node to the linked list
 
-	bucket->value = value;
-	bucket->key = key;
+	while (bucket)
+	{
+		// If we match key add a new bucket.
+		if (!bucket->next || !ft_strncmp(bucket->key, key, strlen_largest(bucket->key, key)))
+		{
+			assert(bucket->next == NULL && "bucket->next has to be zero!");
+			bucket->next = bucket_add();
+			bucket->key = key;
+			bucket->value = value;
+			break;
+		}
+		bucket = bucket->next;
+	}
 	return map;
 }
 
@@ -66,25 +84,13 @@ char *map_get_value(t_map *map, char *key)
 	return NULL;
 }
 
-static void bucket_free(t_bucket *bucket)
-{
-	t_bucket *tmp;
-
-	while (bucket)
-	{
-		tmp = bucket;
-		bucket = bucket->next;
-		free(tmp);
-	}
-}
-
 void map_free(t_map *map)
 {
-	size_t i = 0;
-	while (i < map->size)
-	{
-		bucket_free(&map->buckets[i]);
-		i++;
-	}
+	// size_t i = 0;
+	// while (i < map->size)
+	// {
+	// 	free(&map->buckets[i]);
+	// 	i++;
+	// }
 	free(map);
 }

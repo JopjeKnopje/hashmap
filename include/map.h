@@ -7,15 +7,15 @@
 
 
 typedef struct s_bucket {
-	char *value;
-	char *key;
-	struct s_bucket *next;
+	char			*value;
+	char			*key;
+	struct s_bucket	*next;
 } t_bucket;
 
 typedef struct s_map {
 	t_bucket	*buckets;
 	size_t		size;
-	size_t	(*hash_func)(char *key);
+	size_t		(*hash_func)(char *key);
 } t_map;
 
 
