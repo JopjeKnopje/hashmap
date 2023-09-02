@@ -44,25 +44,23 @@ t_map *map_add(t_map *map, char *key, char *value)
 	size_t index = map->hash_func(key) % map->size;
 	t_bucket *bucket = &map->buckets[index];
 
-	// Check if we have key in bucket that matches with the key passed.
-	// 		if true:	overwrite that value with new value.
-	// 
-	// 		else:		we have a collision, so we add another bucket to the next ptr.
-	//					Essentially adding a node to the linked list
 
 	while (bucket)
 	{
-		// If we match key add a new bucket.
-		if (!bucket->next || !ft_strncmp(bucket->key, key, strlen_largest(bucket->key, key)))
+		// when the keys match, overwrite the value preventing duplicates.
+		if (!bucket->key || !ft_strncmp(key, bucket->key, strlen_largest(key, bucket->key)))
 		{
-			assert(bucket->next == NULL && "bucket->next has to be zero!");
-			bucket->next = bucket_add();
-			bucket->key = key;
 			bucket->value = value;
-			break;
+			bucket->key = key;
+			return map;
 		}
+		else if (!bucket->next)
+			bucket->next = bucket_add();
 		bucket = bucket->next;
 	}
+
+
+
 	return map;
 }
 

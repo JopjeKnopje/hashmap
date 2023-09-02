@@ -25,19 +25,35 @@ static char *KEYS[] = {
 	"key5",
 	"key6",
 	"key7",
-	"key8",
+	"key7",
 	NULL,
 };
 
-static void free_shit(t_map *map)
+char	**str_arr_append(char **arr, char *s)
 {
-	size_t i = 0;
-	while (KEYS[i])
+	char		**tmp;
+	size_t		len;
+	size_t		i;
+
+	if (!s)
+		return (NULL);
+	if (!arr)
 	{
-		free(map_get_value(map, KEYS[i]));
+		tmp = ft_calloc(sizeof(char *), 2);
+		tmp[0] = s;
+		return tmp;
+	}
+	len = ft_strlen_2d(arr);
+	tmp = ft_calloc(len + ft_strlen(s) + 1, sizeof(char *));
+	i = 0;
+	while (arr[i])
+	{
+		tmp[i] = arr[i];
 		i++;
 	}
-	map_free(map);
+	tmp[i] = s;
+	free(arr);
+	return (tmp);
 }
 
 int main()
@@ -45,10 +61,13 @@ int main()
 	const size_t SIZE = 2;
 	t_map *map = map_init(&hash, SIZE);
 
+	char **values = NULL;
+
 	size_t i = 0;
 	while (KEYS[i])
 	{
-		map_add(map, KEYS[i], ft_strjoin_free(ft_itoa(i), " value"));
+		values = str_arr_append(values, ft_strjoin_free(ft_itoa(i), " value"));
+		map_add(map, KEYS[i], values[i]);
 		i++;
 	}
 
@@ -66,6 +85,8 @@ int main()
 		i++;
 	}
 
-	free_shit(map);
+	map_free(map);
+	ft_strfree_2d(values);
+
 	return 0;
 }
