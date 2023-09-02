@@ -101,7 +101,7 @@ int main()
 	}
 
 	i = 0;
-	while (i < map->size)
+	while (i < map->capacity)
 	{
 		print_bucket(&map->buckets[i]);
 		i++;

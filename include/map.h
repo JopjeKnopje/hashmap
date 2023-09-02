@@ -14,7 +14,7 @@ typedef struct s_bucket {
 
 typedef struct s_map {
 	t_bucket		*buckets;
-	size_t			size;
+	size_t			capacity;
 	unsigned long	(*hash_func)(char *key);
 } t_map;
 

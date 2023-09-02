@@ -37,31 +37,23 @@ t_map *map_init(unsigned long (*hash_func)(unsigned char *), size_t size)
 	if (!map->buckets)
 		return (NULL);
 
-	map->size = size;
+	map->capacity = size;
 	map->hash_func = hash_func;
 	return (map);
 }
 
 t_map *map_add(t_map *map, char *key, char *value)
 {
-	size_t index = map->hash_func(key) % map->size;
-	t_bucket *bucket = &map->buckets[index];
+	t_bucket	*bucket;
 
-
+	bucket = &map->buckets[map->hash_func(key) % map->capacity];
 	while (bucket)
 	{
-		// when the keys match, overwrite the value preventing duplicates.
 		if (!bucket->key || !ft_strncmp(key, bucket->key, strlen_largest(key, bucket->key)))
 		{
-			if (bucket->key)
-			{
-				printf("keys match [%s]\n", bucket->key);
-				printf("overriding old value [%s] with [%s]\n", bucket->value, value);
-			}
-
 			bucket->value = value;
 			bucket->key = key;
-			return map;
+			return (map);
 		}
 		else if (!bucket->next)
 			bucket->next = bucket_add();
@@ -69,13 +61,12 @@ t_map *map_add(t_map *map, char *key, char *value)
 	}
 
 
-
-	return map;
+	return (map);
 }
 
 char *map_get_value(t_map *map, char *key)
 {
-	size_t index = map->hash_func(key) % map->size;
+	size_t index = map->hash_func(key) % map->capacity;
 	t_bucket *bucket = &map->buckets[index];
 
 	while (bucket)
@@ -105,7 +96,7 @@ void map_free(t_map *map)
 {
 	size_t i = 0;
 
-	while (i < map->size)
+	while (i < map->capacity)
 	{
 		bucket_free(map->buckets[i].next);
 		i++;
