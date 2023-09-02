@@ -23,14 +23,17 @@ static t_bucket *bucket_add()
 	return (bucket);
 }
 
-t_map *map_init(size_t (*hash_func)(char *), size_t size)
+t_map *map_init(unsigned long (*hash_func)(unsigned char *), size_t size)
 {
-	t_map *map = ft_calloc(1, sizeof(t_map));
+	t_map	*map;
+
+	if (!size)
+		return (NULL);
+	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
 		return (NULL);
 
 	map->buckets = ft_calloc(size, sizeof(t_bucket));
-
 	if (!map->buckets)
 		return (NULL);
 
@@ -50,6 +53,12 @@ t_map *map_add(t_map *map, char *key, char *value)
 		// when the keys match, overwrite the value preventing duplicates.
 		if (!bucket->key || !ft_strncmp(key, bucket->key, strlen_largest(key, bucket->key)))
 		{
+			if (bucket->key)
+			{
+				printf("keys match [%s]\n", bucket->key);
+				printf("overriding old value [%s] with [%s]\n", bucket->value, value);
+			}
+
 			bucket->value = value;
 			bucket->key = key;
 			return map;
@@ -71,11 +80,10 @@ char *map_get_value(t_map *map, char *key)
 
 	while (bucket)
 	{
-		if (bucket->key && !ft_strncmp(bucket->key, key, strlen_largest(bucket->key, key)))
+		if (!ft_strncmp(key, bucket->key, strlen_largest(key, bucket->key)))
 		{
 			return bucket->value;
 		}
-
 		bucket = bucket->next;
 	}
 	return NULL;
