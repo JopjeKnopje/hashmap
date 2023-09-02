@@ -2,7 +2,4 @@
 
 ### Resources
 [collisions](https://stackoverflow.com/a/19691998/7363348)
-
-
-### TODO
-- [ ] Fix collisions.
+[cool hashfunctions](http://www.cse.yorku.ca/~oz/hash.html)
