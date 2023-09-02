@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <sys/_types/_va_list.h>
 
 int	strlen_largest(const char *s1, const char *s2)
 {
@@ -84,13 +83,27 @@ char *map_get_value(t_map *map, char *key)
 	return NULL;
 }
 
+static void bucket_free(t_bucket *bucket)
+{
+	t_bucket *tmp;
+
+	while (bucket)
+	{
+		tmp = bucket;
+		bucket = bucket->next;
+		free(tmp);
+	}
+}
+
 void map_free(t_map *map)
 {
-	// size_t i = 0;
-	// while (i < map->size)
-	// {
-	// 	free(&map->buckets[i]);
-	// 	i++;
-	// }
+	size_t i = 0;
+
+	while (i < map->size)
+	{
+		bucket_free(map->buckets[i].next);
+		i++;
+	}
+	free(map->buckets);
 	free(map);
 }

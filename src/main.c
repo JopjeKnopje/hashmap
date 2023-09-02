@@ -25,9 +25,20 @@ static char *KEYS[] = {
 	"key5",
 	"key6",
 	"key7",
-	"key7",
+	"key8",
 	NULL,
 };
+
+static void free_shit(t_map *map)
+{
+	size_t i = 0;
+	while (KEYS[i])
+	{
+		free(map_get_value(map, KEYS[i]));
+		i++;
+	}
+	map_free(map);
+}
 
 int main()
 {
@@ -37,7 +48,7 @@ int main()
 	size_t i = 0;
 	while (KEYS[i])
 	{
-		map_add(map, KEYS[i], ft_itoa(i));
+		map_add(map, KEYS[i], ft_strjoin_free(ft_itoa(i), " value"));
 		i++;
 	}
 
@@ -55,7 +66,6 @@ int main()
 		i++;
 	}
 
-
-	map_free(map);
+	free_shit(map);
 	return 0;
 }
